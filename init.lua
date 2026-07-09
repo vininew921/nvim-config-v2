@@ -2,21 +2,21 @@ vim.g.mapleader = " "
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "--branch=stable", -- latest stable release
+    "https://github.com/folke/lazy.nvim.git",
+    lazypath,
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
 require("vim-options")
 require("lazy").setup({
-    spec = "plugins",
-    change_detection = { notify = false }
+  spec = "plugins",
+  change_detection = { notify = false }
 })
 
 vim.cmd([[
@@ -27,19 +27,19 @@ vim.cmd([[
 local autocmd = vim.api.nvim_create_autocmd
 
 autocmd('LspAttach', {
-    callback = function(e)
-        vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-        vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
-        vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-        vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
-        vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-        vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-        vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-        vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-        vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
-        vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
-        vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-    end
+  callback = function(e)
+    vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+    vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
+    vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+    vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
+    vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+    vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
+    vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
+    vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+  end
 })
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
@@ -68,11 +68,11 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.keymap.set("n", "<C-s>", function()
-    -- format buffer (async)
-    vim.lsp.buf.format()
+  -- format buffer (async)
+  vim.lsp.buf.format()
 
-    -- save file
-    vim.cmd("update")
+  -- save file
+  vim.cmd("update")
 end, { silent = true })
 
 vim.keymap.set("n", "Q", "<nop>")
@@ -82,3 +82,8 @@ vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'svelte' },
+  callback = function() vim.treesitter.start() end,
+})
